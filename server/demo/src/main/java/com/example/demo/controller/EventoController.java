@@ -67,6 +67,7 @@ public class EventoController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("preferenceId", preference.getId());
+        System.out.println(response);
         return response;
     }
 

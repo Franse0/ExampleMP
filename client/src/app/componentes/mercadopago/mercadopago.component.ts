@@ -16,17 +16,17 @@ export class MercadopagoComponent implements OnInit{
   constructor(private mercadoService:MercadoServiceService){}  
   async ngOnInit(): Promise<void> {window.onload = async () => {
       await loadMercadoPago();
-      const mp = new MercadoPago("TEST-7afb9f9d");
+      const mp = new MercadoPago("TEST-7afb9f9d-e8e9-46f2-b369-274a8388eaa1");
 
       const  preferenceId= this.mercadoService.iniciarPago().subscribe(data=>{
-        console.log("soy la informacion: "  +  data)
+        console.log("soy la informacion: "+ {})
       });
       const bricksBuilder = mp.bricks().create("wallet", "wallet_container", {
         initialization: {
-            preferenceId: preferenceId,
+            preferenceId: "<PREFERENCE_ID>",
         },
      });
-      // console.log(bricksBuilder)
+      console.log(bricksBuilder)
       console.log("todo bien")
      
   }
