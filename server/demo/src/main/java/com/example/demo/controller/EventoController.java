@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.IEventoService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -50,23 +48,27 @@ public class EventoController {
     }
 
 
- PreferenceItemRequest item = PreferenceItemRequest.builder()
-         .title("Entrada para el evento, o lo que sea")
+    @PostMapping("/generarPreference")
+    public Map<String, Object> generarPreference() throws MPException, MPApiException
+    {
+        PreferenceItemRequest item = PreferenceItemRequest.builder()
+                .title("Entrada ")
                 .quantity(1)
                 .currencyId("ARS")
                 .unitPrice(new BigDecimal("500.0"))
-            .build();
+                .build();
 
-    List<PreferenceItemRequest> items = new ArrayList<>();
+        List<PreferenceItemRequest> items = new ArrayList<>();
         items.add(item);
 
-    PreferenceRequest request = PreferenceRequest.builder().items(items).build();
-    PreferenceClient client = new PreferenceClient();
-    Preference preference = client.create(request);
+        PreferenceRequest request = PreferenceRequest.builder().items(items).build();
+        PreferenceClient client = new PreferenceClient();
+        Preference preference = client.create(request);
 
-    // En el objeto donde devuelves el json
-        eventoDTO.setPreferenceId(preference.getId());
-
+        Map<String, Object> response = new HashMap<>();
+        response.put("preferenceId", preference.getId());
+        return response;
+    }
 
 
 }

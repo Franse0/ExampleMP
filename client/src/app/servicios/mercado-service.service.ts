@@ -13,4 +13,8 @@ export class MercadoServiceService {
   obtenerDatos():Observable<any>{
     return this.http.get(this.url+"/eventos")
   }
+
+  iniciarPago(){
+    return this.http.post(this.url+"/generarPreference", {})
+  }
 }
