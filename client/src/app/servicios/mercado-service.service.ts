@@ -14,7 +14,13 @@ export class MercadoServiceService {
     return this.http.get(this.url+"/eventos")
   }
 
-  iniciarPago(){
-    return this.http.post(this.url+"/generarPreference", {})
+  iniciarPago(nonce:any, precio:number):Observable<any>{
+    const options = {
+      params :{
+        nonce :nonce,
+        precio:precio
+      }
+    }
+    return this.http.get(this.url+"/generarPreference", options)
   }
 }

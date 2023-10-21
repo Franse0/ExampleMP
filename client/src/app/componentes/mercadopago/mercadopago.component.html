@@ -1,6 +1,7 @@
 <h1>Todas las fiestas!</h1>
 <div class="card" *ngFor="let eventos of eventos">
-    <h1>{{eventos.nombre}} </h1>
-    <span>{{eventos.price}} </span>
+    <h1>{{eventos.nombre}}</h1>
+    <span data-precio=eventos.precio>{{eventos.precio}}</span>
+    <button (click)="inciarPago(eventos.precio)">Pagar</button>
 </div>
 <div id="wallet_container"></div>

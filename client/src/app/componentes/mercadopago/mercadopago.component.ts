@@ -12,33 +12,45 @@ declare var MercadoPago: any;
 })
 export class MercadopagoComponent implements OnInit{
   eventos:any;
-
+  nonce:any= crypto.randomUUID()
+  
   constructor(private mercadoService:MercadoServiceService){}  
-  async ngOnInit(): Promise<void> {window.onload = async () => {
-      await loadMercadoPago();
-      const mp = new MercadoPago("TEST-7afb9f9d-e8e9-46f2-b369-274a8388eaa1");
+ 
+  async loadMercadoPago(){
+    const script = document.createElement('script');
+    script.src = 'https://sdk.mercadopago.com/js/v2/mp.js';
+    script.async = true;
+    script.nonce = this.nonce;
+    document.head.appendChild(script);
 
-      const  preferenceId= this.mercadoService.iniciarPago().subscribe(data=>{
-        console.log("soy la informacion: "+ {})
-      });
-      const bricksBuilder = mp.bricks().create("wallet", "wallet_container", {
-        initialization: {
-            preferenceId: "<PREFERENCE_ID>",
-        },
-     });
-      console.log(bricksBuilder)
-      console.log("todo bien")
-     
+    await new Promise<void>((resolve, reject) => {
+      script.onload =()=> resolve();
+      script.onerror =()=> reject();
+      console.log(reject)
+    });
+    return MercadoPago
   }
+
+   async ngOnInit() {
+    loadMercadoPago()
   this.mercadoService.obtenerDatos().subscribe(data=>{
+    console.log(data)
     this.eventos=data;
-  })
-
-
+   })
 }
 
+inciarPago(precio:number){
+  const mp = new MercadoPago("", {nonce:this.nonce});
 
-
+  this.mercadoService.iniciarPago(this.nonce, precio).subscribe(data=>{
+    const preferenceId = data.preferenceId
+    console.log(precio)    
+    console.log(preferenceId)    
+    const bricksBuilder = mp.bricks().create("wallet", "wallet_container",{
+      initialization: {
+        preferenceId:preferenceId ,
+    }})
+  })}
 }
 
     

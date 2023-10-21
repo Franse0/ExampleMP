@@ -1,15 +1,15 @@
-package com.example.demo.controller;
+package com.mp2.controller;
 
-import com.example.demo.model.Evento;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
+import com.mp2.model.Evento;
+import com.mp2.service.IEventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.service.IEventoService;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -26,7 +26,7 @@ public class EventoController {
 
     @GetMapping("/eventos")
     @ResponseBody
-    public List<Evento>eventos(){
+    public List<Evento> eventos(){
         return eventoService.eventos();
     }
 
@@ -49,14 +49,17 @@ public class EventoController {
 
 
     @GetMapping("/generarPreference")
-    public Map<String, Object> generarPreference(@RequestParam(name = "nonce")String nonce)
+    public Map<String, Object> generarPreference(@RequestParam(name = "nonce")String nonce
+    , @RequestParam(name= "precio")BigDecimal precio)
     {
+
+            System.out.println(precio);
         try {
             PreferenceItemRequest item = PreferenceItemRequest.builder()
                     .title("Entrada ")
                     .quantity(1)
                     .currencyId("ARS")
-                    .unitPrice(new BigDecimal("500.0"))
+                    .unitPrice(precio)
                     .build();
 
             System.out.println("okay");
